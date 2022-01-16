@@ -10,6 +10,10 @@ class UserRegisterView(View):
 	form_class = UserRegistrationForm
 	template_name = 'account/register.html'
 
+	def dispatch(self, request, *args, **kwargs):
+		if request.user.is_authenticated:
+			return redirect('home:home')
+
 	def get(self, request):
 		form = self.form_class()
 		return render(request, self.template_name, {'form':form})
@@ -27,6 +31,10 @@ class UserRegisterView(View):
 class UserLoginView(View):
 	form_class = UserLoginForm
 	template_name = 'account/login.html'
+
+	def dispatch(self, request, *args, **kwargs):
+		if request.user.is_authenticated:
+			return redirect('home:home')
 
 	def get(self, request):
 		form = self.form_class
