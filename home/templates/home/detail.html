@@ -10,6 +10,16 @@
     <p><a href="{% url 'account:user_profile' post.user.id %}">{{ post.user.username }}</a> - {{ post.updated|date:"Y-M" }}</p>
     <p>{{ post.body }}</p><hr/>
 
+    {% if request.user.is_authenticated %}
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Send">
+        </form>
+    {% else %}
+        <p class="alert alert-danger">Only logged in users can comment.</p>
+    {% endif %}
+
     {% for comment in comments %}
         <div class="card bg-dark text-white">
             <p class="card-header">{{ comment.user }} | {{ comment.created|timesince }}</p>
