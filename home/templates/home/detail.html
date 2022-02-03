@@ -15,7 +15,7 @@
             {% csrf_token %}
             {{ form.as_p }}
             <input type="submit" value="Send">
-        </form>
+        </form> <br/>
     {% else %}
         <p class="alert alert-danger">Only logged in users can comment.</p>
     {% endif %}
@@ -24,7 +24,13 @@
         <div class="card bg-dark text-white">
             <p class="card-header">{{ comment.user }} | {{ comment.created|timesince }}</p>
             <p class="card-body">{{ comment.body }}</p>
-        </div>
+
+            {% with replies=comment.rcomments.all %}
+                {% for reply in replies %}
+                    <p class="bg-primary p-3 m-2">{{ reply.user }} <br/> {{ reply.body }}</p>
+                {% endfor %}
+            {% endwith %}
+        </div><br/>
     {% empty %}
         <p>No comments yet!</p>
     {% endfor %}
