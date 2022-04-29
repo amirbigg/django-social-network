@@ -103,6 +103,14 @@ class UserPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
 
 
 class UserFollowView(LoginRequiredMixin, View):
+	def dispatch(self, request, *args, **kwargs):
+		user=User.objects.get(id=kwargs['user_id'])
+		if user.id != request.user.id:
+			return super().dispatch(request, *args, **kwargs)
+		else:
+			messages.error(request,'you cant follow/unfollow your account','danger')
+			return redirect('account:user_profile',user.id)
+
 	def get(self, request, user_id):
 		user = User.objects.get(id=user_id)
 		relation = Relation.objects.filter(from_user=request.user, to_user=user)
@@ -115,6 +123,14 @@ class UserFollowView(LoginRequiredMixin, View):
 
 
 class UserUnfollowView(LoginRequiredMixin, View):
+	def dispatch(self, request, *args, **kwargs):
+		user=User.objects.get(id=kwargs['user_id'])
+		if user.id != request.user.id:
+			return super().dispatch(request, *args, **kwargs)
+		else:
+			messages.error(request,'you cant follow/unfollow your account','danger')
+			return redirect('account:user_profile',user.id)
+	
 	def get(self, request, user_id):
 		user = User.objects.get(id=user_id)
 		relation = Relation.objects.filter(from_user=request.user, to_user=user)
